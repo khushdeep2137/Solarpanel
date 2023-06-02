@@ -15,10 +15,6 @@
 </head>
 
 <body onload="getRecords()">
-  <div id="tiltInputContainer">
-    <label for="tiltInput">Tilt Value:</label>
-    <input type="number" id="tiltInput" min="-90" max="90" step="1" />
-  </div>
   <section class="outer_layout">
    
     <div id="viewDiv">
@@ -26,8 +22,6 @@
       </div>
       <calcite-panel id="propPanel">
         <calcite-block id="headingBlock">
-          <calcite-action icon="line" title="tilt" scale="s" slot="control"
-          id="tiltBtn"></calcite-action>
           <calcite-action icon="line" title="Draw a polyline" scale="s" slot="control"
             id="polylineBtn"></calcite-action>
           <calcite-action icon="rectangle" title="Select Area" scale="s" slot="control" id="rectangleBtn">

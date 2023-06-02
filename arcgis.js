@@ -101,9 +101,6 @@ require([
     const mapView = renderMap("viewDiv", lat || 40.022, lon || -105.255, zoom, "gray-vector");
     const searchWidget = setSearchWidget(lat, lon);
     const sketchVM = elementDrawerOnMapEventListner();
-    // var wfsLayer = setWfsLayer();
-
-
     mapView.map.add(textLayer);
 
     //Excuting Following statements after loading the map
@@ -224,15 +221,7 @@ require([
             searchWidget.clear();
             selectedGraphics = event.graphics;
             if (event.state === "complete") {
-                console.log("update")
-                debugger
                 let oldRotationAngle = event.graphics[0].getAttribute('rotationAngle');
-                console.log(event.aborted)
-                console.log(event.graphics.length)
-                console.log(event.graphics[0].attributes)
-
-                console.log(event.graphics[0].attributes.panelId)
-
                 event.graphics.forEach(x => {
                     if (x.geometry.type == 'polygon' && x.geometry.rings.length > 0) {
                         x.attributes.latitude = x.geometry.extent.center.latitude
@@ -241,7 +230,6 @@ require([
                     }
                 })
                 if (!event.aborted && event.graphics.length == 1 && event.graphics[0].attributes && event.graphics[0].attributes.panelId) {
-                    console.log("buildTool")
                     buildTool(event.graphics[0], oldRotationAngle)
                 }
                 if (event.aborted) {
@@ -261,105 +249,100 @@ require([
 
     function renderMap(container, lat, lon, zoom, basemap) {
 
-        var mapView = new SceneView({
-            container: container,
-            map: new Map({
-                basemap: basemap,
-                layers: [wfsLayer, graphicsLayer],
-                spatialReference: new SpatialReference({ wkid: 4326 })
-            }),
-            camera: {
-                position: {
-                    latitude: lat,
-                    longitude: lon,
-                    z: zoom
-                },
-                tilt: 0, // Set the initial tilt of the camera if desired
-                heading: 0 // Set the initial heading of the camera if desired
-            },
-            highlightOptions: {},
-            // Add event listener for webglcontextlost event
-            context: {
-                webglContextLost: function (event) {
-                    console.warn("WebGL context lost. Attempting to recover...");
-                    event.preventDefault(); // Prevent the default context loss handling
-
-                    // Implement your own recovery mechanism here
-                    // For example, you can recreate the WebGL context and restore the state
-
-                    // After recovering, reinitialize the SceneView
-                    mapView.initialize();
-                }
-            }
-        });
-
-
-        // var mapView = new MapView({
+        // var mapView = new SceneView({
         //     container: container,
         //     map: new Map({
         //         basemap: basemap,
         //         layers: [wfsLayer, graphicsLayer],
         //         spatialReference: new SpatialReference({ wkid: 4326 })
         //     }),
-        //     center: [lon, lat],// lon, lat
-        //     zoom: zoom,
-        //     interactable: true,
-        //     highlightOptions: {}
+        //     camera: {
+        //         position: {
+        //             latitude: lat,
+        //             longitude: lon,
+        //             z: zoom
+        //         },
+        //         tilt: 0, // Set the initial tilt of the camera if desired
+        //         heading: 0 // Set the initial heading of the camera if desired
+        //     },
+        //     highlightOptions: {},
+        //     // Add event listener for webglcontextlost event
+        //     context: {
+        //         webglContextLost: function (event) {
+        //             console.warn("WebGL context lost. Attempting to recover...");
+        //             event.preventDefault(); // Prevent the default context loss handling
+        //             mapView.initialize();
+        //         }
+        //     }
         // });
 
 
-
-        mapView.on("webglcontextlost", function (event) {
-            console.log("lost")
-            event.preventDefault(); // Prevent the default behavior of the context loss
-
-            // Recreate the WebGL context and restore resources
-            mapView.container.removeChild(mapView.canvas); // Remove the existing canvas element
-            mapView = null; // Clear the reference to the old view
-
-            // Recreate the map view
-            mapView = new SceneView({
-                container: container,
-                map: new Map({
-                    basemap: basemap,
-                    layers: [wfsLayer, graphicsLayer],
-                    spatialReference: new SpatialReference({ wkid: 4326 })
-                }),
-                camera: {
-                    position: {
-                        latitude: lat,
-                        longitude: lon,
-                        z: zoom
-                    },
-                    tilt: 0, // Set the initial tilt of the camera if desired
-                    heading: 0 // Set the initial heading of the camera if desired
-                },
-                highlightOptions: {},
-                // Add event listener for webglcontextlost event
-                context: {
-                    webglContextLost: function (event) {
-                        console.warn("WebGL context lost. Attempting to recover...");
-                        event.preventDefault(); // Prevent the default context loss handling
-
-                        // Implement your own recovery mechanism here
-                        // For example, you can recreate the WebGL context and restore the state
-
-                        // After recovering, reinitialize the SceneView
-                        mapView.initialize();
-                    }
-                }
-            });
-
-            // Re-add layers and restore other resources
-            // ...
-
-            // Refresh the view
-            mapView.then(function () {
-                // View has been restored
-            });
-
-
+        var mapView = new MapView({
+            container: container,
+            map: new Map({
+                basemap: basemap,
+                layers: [wfsLayer, graphicsLayer],
+                spatialReference: new SpatialReference({ wkid: 4326 })
+            }),
+            center: [lon, lat],// lon, lat
+            zoom: zoom,
+            interactable: true,
+            highlightOptions: {}
         });
+
+
+
+        // mapView.on("webglcontextlost", function (event) {
+        //     console.log("lost")
+        //     event.preventDefault(); // Prevent the default behavior of the context loss
+
+        //     // Recreate the WebGL context and restore resources
+        //     mapView.container.removeChild(mapView.canvas); // Remove the existing canvas element
+        //     mapView = null; // Clear the reference to the old view
+
+        //     // Recreate the map view
+        //     mapView = new SceneView({
+        //         container: container,
+        //         map: new Map({
+        //             basemap: basemap,
+        //             layers: [wfsLayer, graphicsLayer],
+        //             spatialReference: new SpatialReference({ wkid: 4326 })
+        //         }),
+        //         camera: {
+        //             position: {
+        //                 latitude: lat,
+        //                 longitude: lon,
+        //                 z: zoom
+        //             },
+        //             tilt: 0, // Set the initial tilt of the camera if desired
+        //             heading: 0 // Set the initial heading of the camera if desired
+        //         },
+        //         highlightOptions: {},
+        //         // Add event listener for webglcontextlost event
+        //         context: {
+        //             webglContextLost: function (event) {
+        //                 console.warn("WebGL context lost. Attempting to recover...");
+        //                 event.preventDefault(); // Prevent the default context loss handling
+
+        //                 // Implement your own recovery mechanism here
+        //                 // For example, you can recreate the WebGL context and restore the state
+
+        //                 // After recovering, reinitialize the SceneView
+        //                 mapView.initialize();
+        //             }
+        //         }
+        //     });
+
+        //     // Re-add layers and restore other resources
+        //     // ...
+
+        //     // Refresh the view
+        //     mapView.then(function () {
+        //         // View has been restored
+        //     });
+
+
+        // });
 
 
 
@@ -393,7 +376,6 @@ require([
 
 
         mapView.on("click", function (event) {
-            debugger
             var query = wfsLayer.createQuery();
             query.geometry = event.mapPoint;
             query.spatialRelationship = "intersects";
@@ -431,56 +413,6 @@ require([
         }
         return mapView;
     }
-    function setWfsLayer() {
-        debugger
-        // var wfsUrl = "https://geobretagne.fr/geoserver/ows"; // Replace with your WFS service URL
-        // var wfsLayer = new WFSLayer({
-        //     url: wfsUrl,
-        //     outFields: ["*"],
-        //     popupTemplate: ({
-
-        //     })
-        // });
-        // mapView.map.add(wfsLayer);
-
-        // const graphicLayerIndex = mapView.map.layers.indexOf(graphicsLayer);
-
-        // // Move the graphic layer to the top
-        // mapView.map.layers.reorder(graphicsLayer, graphicLayerIndex);
-
-        // mapView.on("click", function (event) {
-        //     debugger
-        //     var query = wfsLayer.createQuery();
-        //     query.geometry = event.mapPoint;
-        //     query.spatialRelationship = "intersects";
-        //     query.returnGeometry = false;
-        //     query.outFields = ["*"];
-
-        //     wfsLayer.queryFeatures(query).then(function (results) {
-        //         console.log(results)
-        //         if (results.features.length > 0) {
-        //             var feature = results.features[0];
-        //             // Access the attributes of the clicked feature
-        //             var attributes = feature.attributes;
-
-        //             // Set the attributes on the popup template
-        //             wfsLayer.popupTemplate.content = `
-        //             <h3>${attributes.roofName}</h3>
-        //             <p>Roof Area: ${attributes.area}</p>
-        //             <p>Roof Tilt: ${attributes.tilt}</p>
-        //           `;
-
-
-
-        //             // Perform any further operations with the attributes
-        //             // Display in a custom popup, console log, etc.
-        //         }
-        //     });
-        // });
-        // return wfsLayer;
-
-    }
-
     function setSearchWidget(lat, lon) {
         var searchWidget = new Search({
             view: mapView
@@ -592,51 +524,6 @@ require([
 
 
     function toolbarButtonClickEvents() {
-        if (tiltBtn)
-            tiltBtn.onclick = () => {
-                debugger
-                // Apply tilt transformation to create a new tilted polygon geometry
-                var originalPolygon = selectedGraphics[0].geometry
-                var tiltedPolygon = new Polygon({
-                    spatialReference: originalPolygon.spatialReference
-                });
-
-                originalPolygon.rings.forEach(function (ring) {
-                    var tiltedRing = ring.map(function (vertex) {
-                        var point = new Point({
-                            x: vertex[0],
-                            y: vertex[1],
-                            z: 0,
-                            spatialReference: originalPolygon.spatialReference
-                        });
-
-                        // Apply tilt transformation to the vertex
-                        var tiltedVertex = applyTiltTransformation(point, 45);
-
-                        return [tiltedVertex.x, tiltedVertex.y];
-                    });
-
-                    tiltedPolygon.addRing(tiltedRing);
-                });
-
-
-                // Create a tilted graphic on click
-                var tiltedGraphic = new Graphic({
-                    geometry: tiltedPolygon,
-                    symbol: {
-                        type: "simple-fill",
-                        color: [0, 0, 255, 0.5],
-                        outline: {
-                            color: [0, 0, 255],
-                            width: 2
-                        }
-                    }
-                });
-
-                graphicsLayer.add(tiltedGraphic);
-
-            }
-
         if (polylineBtn)
             polylineBtn.onclick = () => { sketchVM.create("polyline"); }
 
@@ -702,54 +589,12 @@ require([
                     })
                 }
             }
-
-
-
-
         if (portraitLandscapeBtn)
             portraitLandscapeBtn.onclick = () => {
                 rotateGraphics();
             }
 
 
-        // Access the tilt input element
-        var tiltInput = document.getElementById("tiltInput");
-
-        // Attach an event listener to handle input changes
-        tiltInput.addEventListener("input", handleTiltChange);
-
-
-        // Function to handle tilt input changes
-        function handleTiltChange() {
-            var newTilt = parseFloat(tiltInput.value);
-
-            // Update the graph tilt value
-            updateGraphTilt(newTilt);
-        }
-
-        // Function to update the graph tilt
-        function updateGraphTilt(tilt) {
-            console.log(selectedGraphics[0].tilt)
-            // Update the graph's tilt property
-            selectedGraphics[0].tilt = tilt;
-
-            // Refresh the graph to reflect the changes
-            // selectedGraphics[0].refresh();
-        }
-    }
-
-    // Apply tilt transformation to a point
-    function applyTiltTransformation(point, angle) {
-        var radianAngle = angle * (Math.PI / 180);
-        var tiltHeight = Math.tan(radianAngle) * point.y;
-        var tiltedX = point.x - tiltHeight;
-
-        return new Point({
-            x: tiltedX,
-            y: point.y,
-            z: 0,
-            spatialReference: point.spatialReference
-        });
     }
 
     function dataURItoBlob(dataURI) {
@@ -849,7 +694,6 @@ require([
 
 
     function rotateGraphics() {
-        debugger
         var rotationAngle = 90;
         var geometries = [];
         selectedGraphics.forEach(function (graphic) {
@@ -903,7 +747,6 @@ require([
     }
 
     function handleImage(geographicCoords, widthMeters, heightMeters, panelId, panel) {
-        debugger
         var rectangle = createRectangleGeometry(geographicCoords, heightMeters, widthMeters)
         var polygonGraphic = new Graphic({
             geometry: rectangle,
