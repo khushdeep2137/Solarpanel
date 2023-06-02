@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="global.js"></script>
+    <script src="record.js"></script>
+    <link rel="stylesheet" href="arcgis.css">
+</head>
+
+<body onload="getProjects()">
+    
+    <div class="table_outer">
+        <div class="list_btn">
+            <a href="create.html">Create</a>
+           </div>
+        <table class="table ">
+            <thead>
+                <tr>
+                    <th>Longitude</th>
+                    <th>Latitude</th>
+                    <th>Quantity Panel</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Table rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+   
+    <div class="save_overlay" id="loader">
+        <img src="loader.svg" alt="loader" draggable="false">
+    </div>
+</body>
+
+</html>

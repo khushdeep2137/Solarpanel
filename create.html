@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEAPtCki9cq6aEunT4OvyzxB3ixZs_Ycw&libraries=places"></script>
+  <script>
+    let autocomplete;
+
+    function initAutocomplete() {
+      // Create the autocomplete object using the Places API
+      autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('search-box'),
+        { types: ['geocode'] });
+
+      // When the user selects a place from the autocomplete suggestions
+      autocomplete.addListener('place_changed', onPlaceChanged);
+    }
+
+    async function onPlaceChanged() {
+      const place = autocomplete.getPlace();
+      const lat = place.geometry.location.lat();
+      const lng = place.geometry.location.lng();
+      window.location.href = "arcgis.html?lat=" + lat + "&lon=" + lng;
+      return { lat, lng };
+    }
+  </script>
+   <link rel="stylesheet" href="styles.css">
+</head>
+
+<body onload="initAutocomplete()">
+  <div class="search_home">
+    <input id="search-box" type="text" placeholder="Search for a location">
+  </div>
+</body>
+
+</html>

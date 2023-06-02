@@ -1,0 +1,63 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script type="module" src="https://js.arcgis.com/calcite-components/1.0.0-beta.97/calcite.esm.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://js.arcgis.com/calcite-components/1.0.0-beta.97/calcite.css" />
+  <link rel="stylesheet" type="text/css" href="arcgis.css" />
+  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css" />
+  <script src="https://js.arcgis.com/4.25/"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="global.js"></script>
+  <script src="record.js"></script>
+  <script src="arcgis.js"></script>
+</head>
+
+<body onload="getRecords()">
+  <div id="tiltInputContainer">
+    <label for="tiltInput">Tilt Value:</label>
+    <input type="number" id="tiltInput" min="-90" max="90" step="1" />
+  </div>
+  <section class="outer_layout">
+   
+    <div id="viewDiv">
+      <div id="measurements" class="esri-widget">
+      </div>
+      <calcite-panel id="propPanel">
+        <calcite-block id="headingBlock">
+          <calcite-action icon="line" title="tilt" scale="s" slot="control"
+          id="tiltBtn"></calcite-action>
+          <calcite-action icon="line" title="Draw a polyline" scale="s" slot="control"
+            id="polylineBtn"></calcite-action>
+          <calcite-action icon="rectangle" title="Select Area" scale="s" slot="control" id="rectangleBtn">
+          </calcite-action>
+          <calcite-action icon="layout-vertical" title="Portrait/Landscape" scale="s" slot="control"
+            id="portraitLandscapeBtn"></calcite-action>
+          <calcite-action icon="screenshot-mode" title="Screenshot" scale="s" slot="control"
+            id="screenshotBtn"></calcite-action>
+          <calcite-action icon="save" title="Save graphics" scale="s" slot="control" id="saveBtn"></calcite-action>
+          <calcite-action icon="trash" title="Clear graphics" scale="s" slot="control" id="clearBtn"></calcite-action>
+        </calcite-block>
+      </calcite-panel>
+    </div>
+
+    <div class="dragable_items_container mt25">
+      <div class="list_btn">
+        <a href="index.html">Back</a>
+      </div>
+      <div class="dragable_items">
+      </div>
+
+      <div class="dropped_items">
+      </div>
+    </div>
+  </section>
+
+  <!-- OVERLAY WHILE CLICK ON SAVE -->
+  <div class="save_overlay" id="loader">
+    <img src="loader.svg" alt="loader" draggable="false">
+  </div>
+</body>
+
+</html>

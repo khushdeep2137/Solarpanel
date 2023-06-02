@@ -1,0 +1,97 @@
+body{
+    margin: 0;
+}
+/* .esri-search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: #deebfb;
+    overflow: hidden auto;
+}
+
+.index_page .esri-search__container{
+    position: relative;
+    flex: unset;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    border-radius: 10px;
+}
+.index_page .esri-search__input{
+    height: 50px;
+    border-radius: 10px 0 0 10px;
+    padding: 10px;
+    font-size: 14px;
+}
+.index_page .esri-search__input:focus{
+    box-shadow: none;
+    outline: 0;
+}
+.index_page .esri-search .esri-widget--button{
+    height: 50px;
+    width: 50px;
+}
+.index_page .esri-search .esri-widget--button:not(.esri-search__clear-button){
+    background: #4d9dff;
+}
+.index_page .esri-icon-search:before{
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+}
+.index_page .esri-search__form{
+    background: #fff;
+}
+.index_page .esri-menu{
+    top: 50px;
+}
+.index_page .esri-search--show-suggestions .esri-menu.esri-search__warning-menu{
+    opacity: 1;
+    visibility: visible;
+    max-height: unset;
+    z-index: 0;
+} */
+
+.search_home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: #deebfb;
+    overflow: hidden auto;
+}
+.search_home input[type="text"]{
+    height: 36px;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    border: 0;
+    width: 550px;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+.search_home input[type="text"]:focus{
+    outline-color: #8abbf7;
+}
+
+.create_btn{ 
+    background: #0f57b1;
+    color: #fff;
+    padding: 9px 20px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-left: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.create_btn:hover{
+  text-decoration: none;
+  background: #1164cb;
+}
