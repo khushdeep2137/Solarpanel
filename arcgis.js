@@ -35,7 +35,6 @@ require([
     "esri/Map",
     "esri/layers/GraphicsLayer",
     "esri/views/MapView",
-    "esri/views/SceneView",
     "esri/widgets/Expand",
     "esri/Graphic",
     "esri/layers/MapNotesLayer",
@@ -48,7 +47,6 @@ require([
     "esri/geometry/Extent",
     "esri/geometry/Point"
 
-
 ], (
     WFSLayer,
     geometryEngine,
@@ -56,7 +54,6 @@ require([
     Map,
     GraphicsLayer,
     MapView,
-    SceneView,
     Expand,
     Graphic,
     MapNotesLayer,
@@ -208,7 +205,6 @@ require([
         });
 
         sketchVM.on("update", function (event) {
-
             if (event.state == 'active'
                 && event.toolEventInfo &&
                 (
@@ -221,7 +217,6 @@ require([
             searchWidget.clear();
             selectedGraphics = event.graphics;
             if (event.state === "complete") {
-                let oldRotationAngle = event.graphics[0].getAttribute('rotationAngle');
                 event.graphics.forEach(x => {
                     if (x.geometry.type == 'polygon' && x.geometry.rings.length > 0) {
                         x.attributes.latitude = x.geometry.extent.center.latitude
@@ -230,7 +225,7 @@ require([
                     }
                 })
                 if (!event.aborted && event.graphics.length == 1 && event.graphics[0].attributes && event.graphics[0].attributes.panelId) {
-                    buildTool(event.graphics[0], oldRotationAngle)
+                    buildTool(event.graphics[0])
                 }
                 if (event.aborted) {
                     deletePanel();
@@ -249,34 +244,7 @@ require([
 
     function renderMap(container, lat, lon, zoom, basemap) {
 
-        // var mapView = new SceneView({
-        //     container: container,
-        //     map: new Map({
-        //         basemap: basemap,
-        //         layers: [wfsLayer, graphicsLayer],
-        //         spatialReference: new SpatialReference({ wkid: 4326 })
-        //     }),
-        //     camera: {
-        //         position: {
-        //             latitude: lat,
-        //             longitude: lon,
-        //             z: zoom
-        //         },
-        //         tilt: 0, // Set the initial tilt of the camera if desired
-        //         heading: 0 // Set the initial heading of the camera if desired
-        //     },
-        //     highlightOptions: {},
-        //     // Add event listener for webglcontextlost event
-        //     context: {
-        //         webglContextLost: function (event) {
-        //             console.warn("WebGL context lost. Attempting to recover...");
-        //             event.preventDefault(); // Prevent the default context loss handling
-        //             mapView.initialize();
-        //         }
-        //     }
-        // });
-
-
+        
         var mapView = new MapView({
             container: container,
             map: new Map({
@@ -289,64 +257,6 @@ require([
             interactable: true,
             highlightOptions: {}
         });
-
-
-
-        // mapView.on("webglcontextlost", function (event) {
-        //     console.log("lost")
-        //     event.preventDefault(); // Prevent the default behavior of the context loss
-
-        //     // Recreate the WebGL context and restore resources
-        //     mapView.container.removeChild(mapView.canvas); // Remove the existing canvas element
-        //     mapView = null; // Clear the reference to the old view
-
-        //     // Recreate the map view
-        //     mapView = new SceneView({
-        //         container: container,
-        //         map: new Map({
-        //             basemap: basemap,
-        //             layers: [wfsLayer, graphicsLayer],
-        //             spatialReference: new SpatialReference({ wkid: 4326 })
-        //         }),
-        //         camera: {
-        //             position: {
-        //                 latitude: lat,
-        //                 longitude: lon,
-        //                 z: zoom
-        //             },
-        //             tilt: 0, // Set the initial tilt of the camera if desired
-        //             heading: 0 // Set the initial heading of the camera if desired
-        //         },
-        //         highlightOptions: {},
-        //         // Add event listener for webglcontextlost event
-        //         context: {
-        //             webglContextLost: function (event) {
-        //                 console.warn("WebGL context lost. Attempting to recover...");
-        //                 event.preventDefault(); // Prevent the default context loss handling
-
-        //                 // Implement your own recovery mechanism here
-        //                 // For example, you can recreate the WebGL context and restore the state
-
-        //                 // After recovering, reinitialize the SceneView
-        //                 mapView.initialize();
-        //             }
-        //         }
-        //     });
-
-        //     // Re-add layers and restore other resources
-        //     // ...
-
-        //     // Refresh the view
-        //     mapView.then(function () {
-        //         // View has been restored
-        //     });
-
-
-        // });
-
-
-
-
         var zoom = new Zoom({
             view: mapView,
             position: "bottom-right"
@@ -373,8 +283,6 @@ require([
 
         // Add the calcite panel
         mapView.ui.add(measurements, "manual");
-
-
         mapView.on("click", function (event) {
             var query = wfsLayer.createQuery();
             query.geometry = event.mapPoint;
@@ -763,6 +671,7 @@ require([
                 length: geometryEngine.geodesicLength(rectangle, "meters")
             }
         });
+        polygonGraphic.tilt = 45;
         graphicsLayer.add(polygonGraphic);
         getCountOfDroppedPanel();
     }
@@ -897,10 +806,8 @@ require([
         }
     }
 
-    function buildTool(graphic, oldRotationAngle) {
-        debugger
+    function buildTool(graphic) {
         var geometry = graphic.geometry;
-        var rotationAngle = getRotationAngle(geometry)
         var centerPoint = { latitude: graphic.geometry.extent.center.latitude, longitude: graphic.geometry.extent.center.longitude };
         var width = graphic.getAttribute("width");
         var height = graphic.getAttribute("height");
